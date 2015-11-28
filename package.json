@@ -13,7 +13,6 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^2.10.2",
-    "furtive": "^2.2.3",
     "koa": "^1.1.2",
     "koa-handlebars": "^0.5.7",
     "koa-proxy": "^0.4.1",
