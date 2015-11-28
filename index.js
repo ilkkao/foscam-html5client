@@ -26,14 +26,14 @@ app.use(handlebars({
 router.get('/snapshot.png', function *(next) {
     let ts = new Date().getTime();
 
-    if (ts - lastFetch > nconf.get('rate_limit') * 1000) {
-        let url = nconf.get('base_url') +
-            '/CGIProxy.fcgi?cmd=snapPicture2&usr=' +
-            nconf.get('user_name') +
-            '&pwd=' +
-            nconf.get('password');
+    let rateLimit = nconf.get('rate_limit') * 1000 || 60000;
+    let baseUrl = nconf.get('base_url');
+    let username = nconf.get('user_name');
+    let password = nconf.get('password');
 
-        img = yield request.get(url)
+    if (ts - lastFetch > rateLimit) {
+        let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
+        img = yield request.get(url);
         lastFetch = ts;
     }
 
@@ -51,6 +51,10 @@ router.get('/', function *(next) {
     });
 });
 
+let port = nconf.get('node_http_port');
+
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen(nconf.get('node_http_port'));
+app.listen(port);
+
+console.log(`Listening at http://localhost:${port}`);
