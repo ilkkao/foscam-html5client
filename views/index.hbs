@@ -1,61 +1,65 @@
 <style>
-    .webcam-image {
-        width: 100%;
-        height: auto;
+    html {
+        background-color: black;
+        color: white;
     }
 
     body {
-        margin: 0;
-        background-color: black;
+        display: flex;
+        height: 100vh;
+        flex-direction: column;
     }
 
-    .reload-btn {
-        display: none;
-        opacity: 0.9;
+    .main {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu {
+        border-top: 1px solid #cfd8dc;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        padding: 12px;
         color: white;
-        background-color: black;
-        border: 0.7vmin solid white;
-        font-family: "Lucida Console", Monaco, monospace;
     }
 
-    .loading-label {
-        color: black;
-        background-color: yellow;
-        border-color: #888;
-        font-family: "Lucida Console", Monaco, monospace;
+    .webcam-image {
+        display: none;
+        max-width: 100%;
+        height: auto;
     }
 
-    .btn {
-        position: absolute;
-        right: 5vmin;
-        bottom: 5vmin;
-        padding: 2vmin 4vmin;
-        font-size: 7vmin;
-    }
-
-    .reload-btn:hover {
-        background-color: #444;
-        cursor: pointer;
+    .loaded-label, .webcam-image {
+        flex: 1;
     }
 </style>
 
 <script>
     $(function() {
-        $('.reload-btn').click(function() {
+        $('.btn-reload').click(function() {
             location.reload();
         });
 
         $(".webcam-image").one("load", function() {
-            $('.loading-label').hide();
-            $('.reload-btn').show();
+            $('.loading-blocker').hide();
+            $('.webcam-image').show();
         }).each(function() {
             if (this.complete) $(this).load();
         });
     });
 </script>
 
-<div class="loading-label btn">{{loading_label}}</div>
+<div class="main">
+    <img class="webcam-image" src="/snapshot.png" />
+    <div class="loading-blocker">{{loading_label}}</div>
+</div>
 
-<img class="webcam-image" src="/snapshot.png" />
-
-<div class="reload-btn btn">{{refresh_label}}</div>
+<div class="menu indigo">
+    <div class="loaded-label">{{image_taken_label}} {{timestamp}}</div>
+    <div class="buttons">
+        <a class="btn-reload indigo lighten-2 waves-effect waves-light btn-large">{{refresh_label}}</a>
+    </div>
+</div>

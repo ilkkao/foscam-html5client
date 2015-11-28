@@ -7,5 +7,6 @@
 
     "page_title": "My Foscam Page",
     "loading_label": "Loading…",
-    "refresh_label": "Refresh"
+    "refresh_label": "Refresh",
+    "image_taken_label": "Image was taken"
 }
