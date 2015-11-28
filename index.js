@@ -7,10 +7,16 @@ let handlebars = require('koa-handlebars');
 let request = require('superagent-bluebird-promise');
 let app = koa();
 
-let lastFetch = 0;
-let img;
-
 nconf.argv().env().file({ file: 'config.json' });
+
+let rateLimit = nconf.get('rate_limit') * 1000 || 60000;
+let baseUrl = nconf.get('base_url');
+let username = nconf.get('user_name');
+let password = nconf.get('password');
+
+let lastFetch = 0;
+let fetchPending = true;
+let img;
 
 app.use(function *(next){
     let start = new Date;
@@ -24,17 +30,9 @@ app.use(handlebars({
 }));
 
 router.get('/snapshot.png', function *(next) {
-    let ts = new Date().getTime();
-
-    let rateLimit = nconf.get('rate_limit') * 1000 || 60000;
-    let baseUrl = nconf.get('base_url');
-    let username = nconf.get('user_name');
-    let password = nconf.get('password');
-
-    if (ts - lastFetch > rateLimit) {
+    if (fetchPending) {
         let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
         img = yield request.get(url);
-        lastFetch = ts;
     }
 
     this.body = img.body;
@@ -42,12 +40,19 @@ router.get('/snapshot.png', function *(next) {
 });
 
 router.get('/', function *(next) {
+    let ts = new Date().getTime();
+
+    if (ts - lastFetch > rateLimit) {
+        fetchPending = true;
+        lastFetch = ts;
+    }
+
     yield this.render('index', {
         title: nconf.get('page_title'),
         loading_label: nconf.get('loading_label'),
         refresh_label: nconf.get('refresh_label'),
         image_taken_label: nconf.get('image_taken_label'),
-        timestamp: lastFetch === 0 ? new Date().toString() : new Date(lastFetch).toString()
+        timestamp: new Date(lastFetch).toString()
     });
 });
 
