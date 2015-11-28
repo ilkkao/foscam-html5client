@@ -1,0 +1,22 @@
+{
+  "name": "foscam",
+  "version": "0.0.1",
+  "description": "Foscam hack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "foscam"
+  ],
+  "author": "Ilkka Oksanen <iao@iki.fi> (http://iao.fi)",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^2.10.2",
+    "koa": "^1.1.2",
+    "koa-handlebars": "^0.5.7",
+    "koa-proxy": "^0.4.1",
+    "nconf": "^0.8.2",
+    "superagent-bluebird-promise": "^2.1.1"
+  }
+}

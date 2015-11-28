@@ -1,0 +1,11 @@
+{
+    "base_url": "http://xxxyyyzzz.myfoscam.org:88/",
+    "user_name": "admin",
+    "password": "mypassword",
+
+    "node_http_port": 3000,
+
+    "page_title": "My Foscam Page",
+    "loading_label": "Loading…",
+    "refresh_label": "Refresh"
+}
