@@ -5,6 +5,7 @@
 
     "node_http_port": 3000,
 
+    "locale": "en",
     "page_title": "My Foscam Page",
     "loading_label": "Loading…",
     "refresh_label": "Refresh",

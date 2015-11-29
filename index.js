@@ -1,7 +1,6 @@
 'use strict';
 
 let nconf = require('nconf');
-let moment = require('moment');
 let koa = require('koa');
 let router = require('koa-router')();
 let handlebars = require('koa-handlebars');
@@ -49,14 +48,11 @@ router.get('/', function *(next) {
         lastFetch = ts;
     }
 
-    yield this.render('index', {
-        title: nconf.get('page_title'),
-        loading_label: nconf.get('loading_label'),
-        refresh_label: nconf.get('refresh_label'),
-        image_taken_label: nconf.get('image_taken_label'),
-        timestamp: moment(lastFetch).format("MMMM Do, hh:mm"),
-        fetch_possible: rateLimit - (ts - lastFetch)
-    });
+    let parameters = nconf.get();
+    parameters.timestamp = lastFetch;
+    parameters.fetch_possible = rateLimit - (ts - lastFetch);
+
+    yield this.render('index', parameters);
 });
 
 let port = nconf.get('node_http_port');
