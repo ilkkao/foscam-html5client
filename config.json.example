@@ -1,7 +1,7 @@
 {
-    "base_url": "http://xxxyyyzzz.myfoscam.org:88/",
+    "base_url": "http://a.b.c.d:88/",
     "user_name": "admin",
-    "password": "mypassword",
+    "password": "",
 
     "node_http_port": 3000,
 
