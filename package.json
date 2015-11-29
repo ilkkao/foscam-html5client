@@ -1,10 +1,14 @@
 {
-  "name": "foscam",
+  "name": "foscam-html5client",
   "version": "0.0.1",
-  "description": "Foscam hack",
+  "description": "Foscam HTML5 frontend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilkkao/foscam-html5client.git"
   },
   "keywords": [
     "foscam"
