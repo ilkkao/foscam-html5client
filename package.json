@@ -17,6 +17,7 @@
     "koa-handlebars": "^0.5.7",
     "koa-proxy": "^0.4.1",
     "koa-router": "^5.3.0",
+    "moment": "^2.10.6",
     "nconf": "^0.8.2",
     "superagent-bluebird-promise": "^2.1.1"
   }

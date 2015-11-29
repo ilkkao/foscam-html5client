@@ -2,11 +2,15 @@
     html {
         background-color: black;
         color: white;
+        width: 100%;
+        height: 100%;
     }
 
     body {
+        font-size: 27px;
         display: flex;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         flex-direction: column;
     }
 
@@ -29,16 +33,35 @@
     .webcam-image {
         display: none;
         max-width: 100%;
-        height: auto;
+        max-height: 100%;
     }
 
-    .loaded-label, .webcam-image {
+    .loaded-label {
         flex: 1;
     }
 </style>
 
 <script>
     $(function() {
+        var countdown = {{fetch_possible}};
+
+        function updateWaitingText() {
+            $('.btn-reload').text(Math.ceil(countdown / 1000));
+        }
+
+        updateWaitingText();
+
+        var countdownTimer = setInterval(function() {
+            countdown -= 1000;
+            updateWaitingText();
+
+            if (countdown <= 0) {
+                $('.btn-reload').removeClass('disabled');
+                $('.btn-reload').text("{{refresh_label}}");
+                clearInterval(countdownTimer);
+            }
+        }, 1000);
+
         $('.btn-reload').click(function() {
             location.reload();
         });
@@ -60,6 +83,6 @@
 <div class="menu indigo">
     <div class="loaded-label">{{image_taken_label}} {{timestamp}}</div>
     <div class="buttons">
-        <a class="btn-reload indigo lighten-2 waves-effect waves-light btn-large">{{refresh_label}}</a>
+        <a class="btn-reload indigo lighten-2 waves-effect waves-light btn-large disabled"></a>
     </div>
 </div>

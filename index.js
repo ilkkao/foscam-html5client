@@ -1,6 +1,7 @@
 'use strict';
 
 let nconf = require('nconf');
+let moment = require('moment');
 let koa = require('koa');
 let router = require('koa-router')();
 let handlebars = require('koa-handlebars');
@@ -33,6 +34,7 @@ router.get('/snapshot.png', function *(next) {
     if (fetchPending) {
         let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
         img = yield request.get(url);
+        fetchPending = false;
     }
 
     this.body = img.body;
@@ -52,7 +54,8 @@ router.get('/', function *(next) {
         loading_label: nconf.get('loading_label'),
         refresh_label: nconf.get('refresh_label'),
         image_taken_label: nconf.get('image_taken_label'),
-        timestamp: new Date(lastFetch).toString()
+        timestamp: moment(lastFetch).format("MMMM Do, hh:mm"),
+        fetch_possible: rateLimit - (ts - lastFetch)
     });
 });
 
