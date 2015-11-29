@@ -1,5 +1,7 @@
 'use strict';
 
+let fs = require('fs');
+let path = require('path');
 let nconf = require('nconf');
 let koa = require('koa');
 let router = require('koa-router')();
@@ -17,6 +19,13 @@ let password = nconf.get('password');
 let lastFetch = 0;
 let fetchPending = true;
 let img;
+
+let hitsFile = path.join(__dirname, '.hits_counter');
+let hits = 0;
+
+try {
+    hits = fs.readFileSync(hitsFile);
+} catch(e) {}
 
 app.use(function *(next){
     let start = new Date;
@@ -51,8 +60,13 @@ router.get('/', function *() {
     let parameters = nconf.get();
     parameters.timestamp = lastFetch;
     parameters.fetch_possible = rateLimit - (ts - lastFetch);
+    parameters.hits = ++hits;
 
     yield this.render('index', parameters);
+
+    try {
+        fs.writeFileSync(hitsFile, hits);
+    } catch(e) {}
 });
 
 let port = nconf.get('node_http_port');

@@ -44,6 +44,12 @@
     .loaded-label {
         flex: 1;
     }
+
+    .hits {
+        color: #90FF00;
+        padding: 4px 8px;
+        margin: 0px 20px;
+    }
 </style>
 
 <script>
@@ -90,7 +96,7 @@
 </div>
 
 <div class="menu indigo">
-    <div class="loaded-label">{{image_taken_label}} <span id="timestamp"></span></div>
+    <div class="loaded-label"><span class="hits">👁 {{hits}}</span> {{image_taken_label}} <span id="timestamp"></span></div>
     <div class="buttons">
         <a class="btn-reload indigo lighten-2 waves-effect waves-light btn-large disabled"></a>
     </div>
