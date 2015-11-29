@@ -29,7 +29,7 @@ app.use(handlebars({
     defaultLayout: 'main'
 }));
 
-router.get('/snapshot.png', function *(next) {
+router.get('/snapshot.png', function *() {
     if (fetchPending) {
         let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
         img = yield request.get(url);
@@ -40,7 +40,7 @@ router.get('/snapshot.png', function *(next) {
     this.type = 'png';
 });
 
-router.get('/', function *(next) {
+router.get('/', function *() {
     let ts = new Date().getTime();
 
     if (ts - lastFetch > rateLimit) {
