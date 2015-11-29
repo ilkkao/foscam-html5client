@@ -1,6 +1,6 @@
 # foscam-html5client
 
-Node.js app that can act as a proxy in front of Foscam IP cameras.
+Node.js app that can act as a proxy in front of [Foscam](http://foscam.us/) IP cameras.
 
 ![Screenshot](http://i.imgur.com/IovgTtu.gif)
 
