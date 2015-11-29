@@ -23,6 +23,10 @@ cp config.json.example config.json
 node index.js
 ```
 
+### Contributing
+
+PRs very welcome!
+
 ## Compability
 
 Tested with Foscam FI9828W V1.
