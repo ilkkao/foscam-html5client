@@ -1,13 +1,17 @@
 'use strict';
 
-let fs = require('fs');
-let path = require('path');
-let nconf = require('nconf');
-let koa = require('koa');
-let router = require('koa-router')();
-let handlebars = require('koa-handlebars');
-let request = require('superagent-bluebird-promise');
-let app = koa();
+const fs = require('fs');
+const path = require('path');
+const nconf = require('nconf');
+const koa = require('koa');
+const preRouter = require('koa-router')();
+const router = require('koa-router')();
+const handlebars = require('koa-handlebars');
+const session = require('koa-session');
+const send = require('koa-send');
+const mount = require('koa-mount');
+const request = require('superagent-bluebird-promise');
+const app = koa();
 
 nconf.argv().env().file({ file: 'config.json' });
 
@@ -27,6 +31,10 @@ try {
     hits = fs.readFileSync(hitsFile);
 } catch(e) {}
 
+app.keys = [ nconf.get('web_session_secret') ];
+
+app.use(session(app));
+
 app.use(function *(next){
     let start = new Date;
     yield next;
@@ -37,6 +45,37 @@ app.use(function *(next){
 app.use(handlebars({
     defaultLayout: 'main'
 }));
+
+app.use(mount('/assets', function *(next) {
+    yield send(this, this.path, { root: __dirname + '/public' });
+}));
+
+preRouter.get('/login', function *() {
+    this.session.password = this.query.password;
+    this.status = 200;
+});
+
+app.use(preRouter.routes());
+
+app.use(function *(next) {
+    let parameters = nconf.get();
+
+    if (nconf.get('enable_web_password')) {
+        if (!this.session.password) {
+            yield this.render('password', parameters);
+            return;
+        } else if (this.session.password !== nconf.get('web_password')) {
+            parameters.errorMsg = nconf.get('incorrect_password_label');
+
+            yield this.render('password', parameters);
+
+            this.session.password = '';
+            return;
+        }
+    }
+
+    yield next;
+});
 
 router.get('/snapshot.png', function *() {
     if (fetchPending) {
@@ -70,7 +109,6 @@ router.get('/', function *() {
 });
 
 let port = nconf.get('node_http_port');
-
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(port);
