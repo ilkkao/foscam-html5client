@@ -10,7 +10,7 @@ Node.js app that can act as a proxy in front of [Foscam](http://foscam.us/) IP c
 
 - Hides the IP address, user name, and password of the camera.
 - Rate limits the requests to the camera. By default, a snapshot is fetched at maximum once in a minute. Refresh button is enabled only when a new photo is available.
-- Password protection
+- Optional password protection
 - i18n support
 - Mobile friendly
 - Hits counter
