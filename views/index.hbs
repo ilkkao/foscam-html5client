@@ -27,7 +27,15 @@
             location.reload();
         });
 
-        $(".webcam-image").one("load", function() {
+        $('.btn-logout').click(function() {
+            $.ajax({
+                url: 'logout',
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('.webcam-image').one('load', function() {
             $('.loading-blocker').hide();
             $('.webcam-image').show();
         }).each(function() {
@@ -45,5 +53,9 @@
     <div class="loaded-label"><span class="hits">👁 {{hits}}</span> {{image_taken_label}} <span id="timestamp"></span></div>
     <div class="buttons">
         <a class="btn-reload indigo lighten-2 waves-effect waves-light btn-large disabled"></a>
+
+        {{#if enable_web_password}}
+            <a class="btn-logout indigo lighten-2 waves-effect waves-light btn-large">{{logout_label}}</a>
+        {{/if}}
     </div>
 </div>

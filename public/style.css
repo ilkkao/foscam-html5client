@@ -38,7 +38,12 @@ body {
 }
 
 .loaded-label {
+    font-size: 20px;
     flex: 1;
+}
+
+.btn-logout {
+    margin-left: 15px;
 }
 
 .hits {

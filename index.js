@@ -55,6 +55,11 @@ preRouter.get('/login', function *() {
     this.status = 200;
 });
 
+preRouter.get('/logout', function *() {
+    this.session.password = '';
+    this.status = 200;
+});
+
 app.use(preRouter.routes());
 
 app.use(function *(next) {
