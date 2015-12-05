@@ -38,8 +38,11 @@ export function verifySession(secret) {
                 if (json.status === 'ok') {
                     dispatch(completeLoginSuccess(secret));
                 } else {
-                    dispatch(completeLoginFailure(error.message));
+                    return Promise.reject(new Error(json.reason));
                 }
+            })
+            .catch(error => {
+                dispatch(completeLoginFailure(error.message));
             });
     };
 }
