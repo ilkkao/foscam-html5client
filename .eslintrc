@@ -17,11 +17,22 @@
         "semi": [
             2,
             "always"
-        ]
+        ],
+        "react/jsx-uses-react": 2
     },
     "env": {
         "es6": true,
         "node": true
     },
+    "globals": {
+        "settings": false,
+        "fetch": false,
+        "window": false
+    },
+    "ecmaFeatures": {
+        "modules": true,
+        "jsx": true
+    },
+    "plugins": [ "react" ],
     "extends": "eslint:recommended"
 }

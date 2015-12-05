@@ -8,7 +8,6 @@ const koa = require('koa');
 const ejs = require('koa-ejs');
 const router = require('koa-router')();
 const staticServer = require('koa-static');
-const mount = require('koa-mount');
 const request = require('superagent-bluebird-promise');
 const app = koa();
 
@@ -20,7 +19,7 @@ let username = nconf.get('user_name');
 let password = nconf.get('password');
 
 let clientPassword = nconf.get('web_password');
-let clientPasswordMD5 = crypto.createHash('md5').update(password).digest("hex");
+let clientPasswordMD5 = crypto.createHash('md5').update(password).digest('hex');
 
 let fetchInProgress = false;
 let img;
@@ -33,8 +32,8 @@ try {
 } catch(e) {}
 
 ejs(app, {
-  root: path.join(__dirname, 'dist'),
-  layout: false,
+    root: path.join(__dirname, 'dist'),
+    layout: false
 });
 
 app.use(function *(next){
@@ -68,7 +67,7 @@ router.get('/login', function *() {
         resp.status = 'ok';
         resp.secret = clientPasswordMD5;
     } else {
-        resp.reason = nconf.get('incorrect_password_label')
+        resp.reason = nconf.get('incorrect_password_label');
     }
 
     this.body = resp;

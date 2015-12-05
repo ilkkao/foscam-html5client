@@ -2,7 +2,7 @@ import {
     COMPLETE_LOGIN_SUCCESS,
     COMPLETE_LOGIN_FAILURE,
     LOGOUT
-} from '../actions/session'
+} from '../actions/session';
 
 export default function session(state = { loggedIn: false, loginFailureReason: '' }, action) {
     switch (action.type) {
@@ -21,7 +21,7 @@ export default function session(state = { loggedIn: false, loginFailureReason: '
             return {
                 loggedIn: false,
                 loginFailureReason: ''
-            }
+            };
         default:
             return state;
     }

@@ -24,7 +24,7 @@ export function startLogin(password) {
             .catch(error => {
                 dispatch(completeLoginFailure(error.message));
             });
-    }
+    };
 }
 
 export function completeLoginSuccess(secret) {
