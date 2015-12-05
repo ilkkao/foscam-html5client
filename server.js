@@ -5,7 +5,6 @@ const crypto = require('crypto');
 const path = require('path');
 const nconf = require('nconf');
 const koa = require('koa');
-const ejs = require('koa-ejs');
 const router = require('koa-router')();
 const staticServer = require('koa-static');
 const request = require('superagent-bluebird-promise');
@@ -31,36 +30,15 @@ try {
     hits = fs.readFileSync(hitsFile);
 } catch(e) {}
 
-ejs(app, {
-    root: path.join(__dirname, 'dist'),
-    layout: false
-});
-
 app.use(function *(next){
     let start = new Date;
     yield next;
     let ms = new Date - start;
-    console.log('%s %s - %s', this.method, this.url, ms);
+    console.log(`${this.method} ${this.url} - ${ms}`);
+    console.log(`  [RESP] (${this.status})`);
 });
 
-router.get('/', function *() {
-    yield this.render('index', {
-        title: nconf.get('page_title'),
-        settings : JSON.stringify({
-            enableWebPassword: nconf.get('enable_web_password'),
-            locale: nconf.get('locale'),
-            pageTitle: nconf.get('page_title'),
-            loadingLabel: nconf.get('loading_label'),
-            refreshLabel: nconf.get('refresh_label'),
-            imageTakenLabel: nconf.get('image_taken_label'),
-            passwordLabel: nconf.get('password_label'),
-            loginLabel: nconf.get('login_label'),
-            logoutLabel: nconf.get('logout_label')
-        })
-    });
-});
-
-router.get('/login', function *() {
+router.get('/api/login', function *() {
     let resp = { status: 'error' };
 
     if (this.query.password === clientPassword) {
@@ -73,12 +51,24 @@ router.get('/login', function *() {
     this.body = resp;
 });
 
-router.get('/logout', function *() {
+router.get('/api/logout', function *() {
     this.session.password = '';
     this.status = 200;
 });
 
-router.get('/snapshot.png', function *() {
+router.get('/api/session', function *() {
+    let resp = { status: 'error' };
+
+    if (this.query.secret === clientPasswordMD5) {
+        resp.status = 'ok';
+    } else {
+        resp.reason = nconf.get('expired_session_label');
+    }
+
+    this.body = resp;
+});
+
+router.get('/api/snapshot.png', function *() {
     if (this.query.secret !== clientPasswordMD5) {
         this.status = 401;
         return;

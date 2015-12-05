@@ -1,12 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const nconf = require('nconf');
+
+nconf.argv().env().file({ file: 'config.json' });
 
 module.exports = {
-    devtool: 'eval',
+    devtool: 'cheap-source-map',
     entry: [
-        // 'webpack-dev-server/client?http://localhost:3000',
-        // 'webpack/hot/only-dev-server',
+        'webpack-dev-server/client',
+        'webpack/hot/only-dev-server',
         './client/index'
     ],
     output: {
@@ -18,7 +21,19 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'Foscam',
             template: path.join(__dirname, 'client/index.html'),
-            inject: 'body'
+            inject: 'body',
+            appTitle: nconf.get('page_title'),
+            appSettings : JSON.stringify({
+                enableWebPassword: nconf.get('enable_web_password'),
+                locale: nconf.get('locale'),
+                pageTitle: nconf.get('page_title'),
+                loadingLabel: nconf.get('loading_label'),
+                refreshLabel: nconf.get('refresh_label'),
+                imageTakenLabel: nconf.get('image_taken_label'),
+                passwordLabel: nconf.get('password_label'),
+                loginLabel: nconf.get('login_label'),
+                logoutLabel: nconf.get('logout_label')
+            })
         }),
         new webpack.ProvidePlugin({
             fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch'
@@ -33,5 +48,12 @@ module.exports = {
             test: /\.css$/,
             loader: 'style!css'
         }]
+    },
+    devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://localhost:3000'
+            }
+        }
     }
 };

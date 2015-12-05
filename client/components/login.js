@@ -17,13 +17,14 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div className="login-container">
+            <div className="flex-container flex-center flex-1">
                 <TextField
                     hintText={settings.passwordLabel}
                     floatingLabelText={settings.passwordLabel}
                     type="password"
                     onChange={this.handleChange.bind(this)}
                 />
+
                 <RaisedButton
                     style={{marginTop: 30}}
                     label={settings.loginLabel}

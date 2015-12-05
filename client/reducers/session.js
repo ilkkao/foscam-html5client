@@ -4,7 +4,7 @@ import {
     LOGOUT
 } from '../actions/session';
 
-export default function session(state = { loggedIn: false, loginFailureReason: '' }, action) {
+export default function session(state = {}, action) {
     switch (action.type) {
         case COMPLETE_LOGIN_SUCCESS:
             return {

@@ -7,31 +7,36 @@ html {
     height: 100%;
 }
 
-body, #root, .main-container {
+body, #root {
     margin: 0px;
     width: 100%;
     height: 100%;
 }
 
-.main-container {
+.full-height {
+    height: 100%;
+}
+
+.flex-container {
     display: flex;
     flex-direction: column;
 }
 
-.login-container {
+.flex-1 {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+}
+
+.flex-center {
     align-items: center;
     justify-content: center;
 }
 
-.login-button {
-    margin-top: 30px;
+.black {
+    background-color: black;
 }
 
-.hits {
-    color: #90FF00;
-    padding: 4px 8px;
-    margin: 0px 20px;
+.snapshot {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }

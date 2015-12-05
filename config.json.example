@@ -19,4 +19,5 @@
     "login_label": "Login",
     "logout_label": "Logout",
     "incorrect_password_label": "Incorrect password",
+    "expired_session_label": "Session expired."
 }

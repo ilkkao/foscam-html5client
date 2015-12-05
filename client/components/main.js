@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { startLogin, logout } from '../actions/session';
 
-import FlatButton from 'material-ui/lib/raised-button';
+import FlatButton from 'material-ui/lib/flat-button';
 import AppBar from 'material-ui/lib/app-bar';
 
 import Login from './login';
@@ -28,7 +28,7 @@ export default class Main extends Component {
         }
 
         return (
-            <div className="main-container">
+            <div className="flex-container full-height">
                 <AppBar
                     title={<span>{settings.pageTitle}</span>}
                     showMenuIconButton={false}
