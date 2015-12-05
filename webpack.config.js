@@ -8,7 +8,7 @@ nconf.argv().env().file({ file: 'config.json' });
 module.exports = {
     devtool: 'cheap-source-map',
     entry: [
-        'webpack-dev-server/client',
+        'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
         './client/index'
     ],
@@ -54,6 +54,10 @@ module.exports = {
             '/api/*': {
                 target: 'http://localhost:3000'
             }
+        },
+        stats: {
+            colors: true,
+            chunks: false
         }
     }
 };
