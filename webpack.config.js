@@ -34,9 +34,6 @@ module.exports = {
                 loginLabel: nconf.get('login_label'),
                 logoutLabel: nconf.get('logout_label')
             })
-        }),
-        new webpack.ProvidePlugin({
-            fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch'
         })
     ],
     module: {
