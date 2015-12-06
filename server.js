@@ -4,6 +4,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
 const nconf = require('nconf');
+const socketIo = require('socket.io');
 const koa = require('koa');
 const router = require('koa-router')();
 const staticServer = require('koa-static');
@@ -27,7 +28,7 @@ let hitsFile = path.join(__dirname, '.hits_counter');
 let hits = 0;
 
 try {
-    hits = fs.readFileSync(hitsFile);
+    hits = JSON.parse(fs.readFileSync(hitsFile)).hits || 0;
 } catch(e) {}
 
 app.use(function *(next){
@@ -36,36 +37,6 @@ app.use(function *(next){
     let ms = new Date - start;
     console.log(`${this.method} ${this.url} - ${ms}`);
     console.log(`  [RESP] (${this.status})`);
-});
-
-router.get('/api/login', function *() {
-    let resp = { status: 'error' };
-
-    if (this.query.password === clientPassword) {
-        resp.status = 'ok';
-        resp.secret = clientPasswordMD5;
-    } else {
-        resp.reason = nconf.get('incorrect_password_label');
-    }
-
-    this.body = resp;
-});
-
-router.get('/api/logout', function *() {
-    this.session.password = '';
-    this.status = 200;
-});
-
-router.get('/api/session', function *() {
-    let resp = { status: 'error' };
-
-    if (this.query.secret === clientPasswordMD5) {
-        resp.status = 'ok';
-    } else {
-        resp.reason = nconf.get('expired_session_label');
-    }
-
-    this.body = resp;
 });
 
 router.get('/api/snapshot.png', function *() {
@@ -85,16 +56,44 @@ router.get('/api/snapshot.png', function *() {
     this.type = 'png';
 
     try {
-        fs.writeFileSync(hitsFile, ++hits);
+        fs.writeFileSync(hitsFile, JSON.stringify({ hits: ++hits }));
     } catch(e) {}
 });
 
 app.use(router.routes());
 app.use(router.allowedMethods());
-
 app.use(staticServer('dist'));
 
+let server = require('http').Server(app.callback());
+let io = socketIo(server);
+
+io.on('connection', socket => {
+    let authenticated = false;
+
+    let emit = (type, data) => {
+        data.type = type;
+        socket.emit('event', data);
+    };
+
+    socket.on('START_LOGIN', data => {
+        if (data.secret !== clientPasswordMD5 && !data.password) {
+            emit('COMPLETE_LOGIN_FAILURE', { reason: 'Session expired' });
+        } else if (data.password !== clientPassword) {
+            emit('COMPLETE_LOGIN_FAILURE', { reason: nconf.get('incorrect_password_label')} );
+        } else {
+            emit('COMPLETE_LOGIN_SUCCESS', { secret: clientPasswordMD5 });
+            emit('UPDATE_HITS', { hits: hits });
+            authenticated = true;
+        }
+    });
+
+    socket.on('LOGOUT', data => {
+        authenticated = false;
+    });
+});
+
 let port = nconf.get('node_http_port');
-app.listen(port);
+
+server.listen(port);
 
 console.log(`Listening at http://localhost:${port}`);
