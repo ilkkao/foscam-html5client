@@ -76,14 +76,14 @@ io.on('connection', socket => {
     };
 
     socket.on('START_LOGIN', data => {
-        if (data.secret !== clientPasswordMD5 && !data.password) {
-            emit('COMPLETE_LOGIN_FAILURE', { reason: 'Session expired' });
-        } else if (data.password !== clientPassword) {
-            emit('COMPLETE_LOGIN_FAILURE', { reason: nconf.get('incorrect_password_label')} );
-        } else {
+        if (data.secret === clientPasswordMD5 || data.password === clientPassword) {
             emit('COMPLETE_LOGIN_SUCCESS', { secret: clientPasswordMD5 });
             emit('UPDATE_HITS', { hits: hits });
             authenticated = true;
+        } else if (data.secret !== clientPasswordMD5 && !data.password) {
+            emit('COMPLETE_LOGIN_FAILURE', { reason: 'Session expired' });
+        } else {
+            emit('COMPLETE_LOGIN_FAILURE', { reason: nconf.get('incorrect_password_label')} );
         }
     });
 

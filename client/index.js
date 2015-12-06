@@ -22,7 +22,7 @@ socket.on('connect', () => {
     let secret = Cookies.get('secret');
 
     if (secret) {
-        socket.emit('START_LOGIN', { session: secret });
+        socket.emit('START_LOGIN', { secret: secret });
     }
 });
 

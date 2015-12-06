@@ -33,6 +33,7 @@ export default function session(state = initialState, action) {
                 hits: action.hits
             });
         case LOGOUT:
+            Cookies.remove('secret');
             return state.merge({
                 loggedIn: false,
                 loginFailureReason: ''
