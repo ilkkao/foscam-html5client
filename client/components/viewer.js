@@ -13,7 +13,7 @@ export default class Viewer extends Component {
             <div className="flex-container black flex-1">
                 <div style={{backgroundImage: `url(/api/snapshot.png?secret=${this.props.secret})`}} className="snapshot flex-1 flex-container flex-center"></div>
                 <Toolbar>
-                <ToolbarTitle text="👁 123 13:23" />
+                <ToolbarTitle text={`👁 ${this.props.hits} 13:23`} />
                 <ToolbarSeparator/>
                 <RaisedButton style={{width: 40, minWidth: 40}} label="" primary={true}>
                 <FontIcon className="material-icons">refresh</FontIcon>
