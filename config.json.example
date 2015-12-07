@@ -8,13 +8,10 @@
 
     "enable_web_password": true,
     "web_password": "foobar",
-    "web_session_secret": "insert_long_random_string",
 
     "locale": "en",
     "page_title": "My Foscam Page",
     "loading_label": "Loading…",
-    "refresh_label": "Refresh",
-    "image_taken_label": "Image was taken"
     "password_label": "Password",
     "login_label": "Login",
     "logout_label": "Logout",
