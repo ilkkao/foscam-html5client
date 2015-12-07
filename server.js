@@ -6,7 +6,6 @@ const path = require('path');
 const nconf = require('nconf');
 const socketIo = require('socket.io');
 const koa = require('koa');
-const router = require('koa-router')();
 const staticServer = require('koa-static');
 const request = require('superagent-bluebird-promise');
 const app = koa();
@@ -21,8 +20,10 @@ let password = nconf.get('password');
 let clientPassword = nconf.get('web_password');
 let clientPasswordMD5 = crypto.createHash('md5').update(password).digest('hex');
 
-let fetchInProgress = false;
+let fetchPromise = false;
+
 let img;
+let imgTs;
 
 let hitsFile = path.join(__dirname, '.hits_counter');
 let hits = 0;
@@ -39,29 +40,6 @@ app.use(function *(next){
     console.log(`  [RESP] (${this.status})`);
 });
 
-router.get('/api/snapshot.png', function *() {
-    if (this.query.secret !== clientPasswordMD5) {
-        this.status = 401;
-        return;
-    }
-
-    if (!fetchInProgress) {
-        fetchInProgress = true;
-        let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
-        img = yield request.get(url);
-        fetchInProgress = false;
-    }
-
-    this.body = img.body;
-    this.type = 'png';
-
-    try {
-        fs.writeFileSync(hitsFile, JSON.stringify({ hits: ++hits }));
-    } catch(e) {}
-});
-
-app.use(router.routes());
-app.use(router.allowedMethods());
 app.use(staticServer('dist'));
 
 let server = require('http').Server(app.callback());
@@ -75,10 +53,17 @@ io.on('connection', socket => {
         socket.emit('event', data);
     };
 
+    let sendImage = () => {
+        getImage()
+           .then(image => emit('SHOW_IMAGE', { image: image, ts: imgTs }))
+           .catch(err => emit('SHOW_IMAGE', { image: false, ts: Date.now() }));
+    }
+
     socket.on('START_LOGIN', data => {
         if (data.secret === clientPasswordMD5 || data.password === clientPassword) {
             emit('COMPLETE_LOGIN_SUCCESS', { secret: clientPasswordMD5 });
             emit('UPDATE_HITS', { hits: hits });
+            sendImage();
             authenticated = true;
         } else if (data.secret !== clientPasswordMD5 && !data.password) {
             emit('COMPLETE_LOGIN_FAILURE', { reason: 'Session expired' });
@@ -90,6 +75,8 @@ io.on('connection', socket => {
     socket.on('LOGOUT', data => {
         authenticated = false;
     });
+
+    socket.on('GET_IMAGE', data => sendImage());
 });
 
 let port = nconf.get('node_http_port');
@@ -97,3 +84,29 @@ let port = nconf.get('node_http_port');
 server.listen(port);
 
 console.log(`Listening at http://localhost:${port}`);
+
+function addHit() {
+    try {
+        fs.writeFileSync(hitsFile, JSON.stringify({ hits: ++hits }));
+    } catch(e) {}
+}
+
+function getImage() {
+    if (img ja ei rate limit vilea) {
+        console.log('Returned cached image');
+        return new Promise.resolve(img);
+    }
+
+    if (!fetchPromise) {
+        let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
+        fetchPromise = request.get(url);
+    }
+
+    return fetchPromise.then(resp => {
+        fetchPromise = false;
+        img = resp.body
+        img.ts = Date.now();
+
+        return img;
+    });
+}
