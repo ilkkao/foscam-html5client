@@ -23,12 +23,15 @@ cd foscam-html5client
 npm install
 cp config.json.example config.json
 [edit config.json]
-node index.js
+npm run build
+node server.js
 ```
 
 ### Contributing
 
 PRs very welcome!
+
+App is build on React.js, Redux, Material UI, Immutable.js, Koa, and Socket.io.
 
 ## Compability
 
