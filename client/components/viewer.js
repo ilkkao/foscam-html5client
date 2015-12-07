@@ -11,7 +11,7 @@ export default class Viewer extends Component {
     render() {
         return (
             <div className="flex-container black flex-1">
-                <div style={{backgroundImage: `url(/api/snapshot.png?secret=${this.props.secret})`}} className="snapshot flex-1 flex-container flex-center"></div>
+                <div id="snapshot" style={{backgroundImage: `url(${this.props.imageUrl})`}} className="snapshot flex-1 flex-container flex-center"></div>
                 <Toolbar>
                     <ToolbarGroup key={0} float="left">
                         <div style={{fontFamily: 'Roboto', fontSize: 17, display: 'flex', flexDirection: 'row', marginTop: 20}}>

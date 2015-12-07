@@ -21,7 +21,7 @@ export default class Main extends Component {
         let LogoutButton = null;
 
         if (this.props.loggedIn) {
-            Child = <Viewer logout={this.logout} secret={this.props.secret} hits={this.props.hits} />;
+            Child = <Viewer logout={this.logout} secret={this.props.secret} hits={this.props.hits} imageUrl={this.props.imageUrl}/>;
             LogoutButton = <FlatButton onClick={this.logout.bind(this)} label="Logout" />;
         } else {
             Child = <Login login={this.login.bind(this)} failureReason={this.props.failureReason}/>;
