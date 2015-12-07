@@ -7,11 +7,7 @@ nconf.argv().env().file({ file: 'config.json' });
 
 module.exports = {
     devtool: 'cheap-source-map',
-    entry: [
-        'webpack-dev-server/client?http://localhost:8080',
-        'webpack/hot/only-dev-server',
-        './client/index'
-    ],
+    entry: './client/index',
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'bundle.js',
@@ -48,6 +44,12 @@ module.exports = {
         }]
     },
     devServer: {
+        entry: [
+            'webpack-dev-server/client?http://localhost:8080',
+            'webpack/hot/only-dev-server',
+            './client/index'
+        ],
+
         proxy: {
             '/api/*': {
                 target: 'http://localhost:3000'
