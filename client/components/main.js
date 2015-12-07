@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { startLogin, logout } from '../actions/session';
+import { startLogin, logout, getImage } from '../actions/session';
 
 import FlatButton from 'material-ui/lib/flat-button';
 import AppBar from 'material-ui/lib/app-bar';
@@ -16,15 +16,19 @@ export default class Main extends Component {
         this.props.dispatch(logout());
     }
 
+    refresh() {
+        this.props.dispatch(getImage());
+    }
+
     render() {
         let Child;
         let LogoutButton = null;
 
         if (this.props.loggedIn) {
-            Child = <Viewer {...this.props} />;
+            Child = <Viewer {...this.props} refresh={this.refresh.bind(this)} />;
             LogoutButton = <FlatButton onClick={this.logout.bind(this)} label="Logout" />;
         } else {
-            Child = <Login login={this.login.bind(this)} failureReason={this.props.failureReason}/>;
+            Child = <Login login={this.login.bind(this)} failureReason={this.props.failureReason} />;
         }
 
         return (

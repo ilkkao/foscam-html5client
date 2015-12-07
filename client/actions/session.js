@@ -4,6 +4,7 @@ export const COMPLETE_LOGIN_FAILURE = 'COMPLETE_LOGIN_FAILURE';
 export const UPDATE_HITS = 'UPDATE_HITS';
 export const LOGOUT = 'LOGOUT';
 export const SHOW_IMAGE = 'SHOW_IMAGE';
+export const GET_IMAGE = 'GET_IMAGE';
 
 export function startLogin(password) {
     return { type: START_LOGIN, meta: { remote: true }, password: password };
@@ -15,6 +16,10 @@ export function completeLoginSuccess(secret) {
 
 export function completeLoginFailure(reason) {
     return { type: COMPLETE_LOGIN_FAILURE, reason: reason };
+}
+
+export function getImage() {
+    return { type: GET_IMAGE, meta: { remote: true } };
 }
 
 export function logout() {

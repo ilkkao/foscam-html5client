@@ -23,7 +23,7 @@ export default class Viewer extends Component {
                         </div>
                     </ToolbarGroup>
                     <ToolbarGroup key={1} float="right">
-                        <RaisedButton style={{marginRight: 0}} label="" primary={true}>
+                        <RaisedButton onTouchTap={this.props.refresh} style={{marginRight: 0}} label="" primary={true}>
                             <FontIcon className="material-icons">refresh</FontIcon>
                         </RaisedButton>
                     </ToolbarGroup>
