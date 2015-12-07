@@ -3,46 +3,33 @@
 const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
+const http = require('http');
 const nconf = require('nconf');
 const socketIo = require('socket.io');
 const koa = require('koa');
 const staticServer = require('koa-static');
 const request = require('superagent-bluebird-promise');
-const app = koa();
 
 nconf.argv().env().file({ file: 'config.json' });
 
-let rateLimit = nconf.get('rate_limit') * 1000 || 60000;
-let baseUrl = nconf.get('base_url');
-let username = nconf.get('user_name');
-let password = nconf.get('password');
+const rateLimit = nconf.get('rate_limit') * 1000 || 60000;
+const baseUrl = nconf.get('base_url');
+const username = nconf.get('user_name');
+const password = nconf.get('password');
 
-let clientPassword = nconf.get('web_password');
-let clientPasswordMD5 = crypto.createHash('md5').update(password).digest('hex');
+const clientPassword = nconf.get('web_password');
+const clientPasswordMD5 = crypto.createHash('md5').update(password).digest('hex');
 
 let fetchPromise = false;
 
 let img;
 let imgTs = 0;
 
-let hitsFile = path.join(__dirname, '.hits_counter');
-let hits = 0;
+const hitsFile = path.join(__dirname, '.hits_counter');
+let hits = readHitsFromFile();
 
-try {
-    hits = JSON.parse(fs.readFileSync(hitsFile)).hits || 0;
-} catch(e) {}
-
-app.use(function *(next){
-    let start = new Date;
-    yield next;
-    let ms = new Date - start;
-    console.log(`${this.method} ${this.url} - ${ms}`);
-    console.log(`  [RESP] (${this.status})`);
-});
-
-app.use(staticServer('dist'));
-
-let server = require('http').Server(app.callback());
+let app = configureKoa();
+let server = http.Server(app.callback());
 let io = socketIo(server);
 
 io.on('connection', socket => {
@@ -79,11 +66,41 @@ io.on('connection', socket => {
     socket.on('GET_IMAGE', data => sendImage());
 });
 
-let port = nconf.get('node_http_port');
+startServer(server);
 
-server.listen(port);
+function configureKoa() {
+    let app = koa();
 
-console.log(`Listening at http://localhost:${port}`);
+    app.use(function *(next){
+        let start = new Date;
+        yield next;
+        let ms = new Date - start;
+        console.log(`${this.method} ${this.url} - ${ms}`);
+        console.log(`  [RESP] (${this.status})`);
+    });
+
+    app.use(staticServer('dist'));
+
+    return app;
+}
+
+function startServer(server) {
+    let port = nconf.get('node_http_port');
+
+    server.listen(port);
+
+    console.log(`Listening at http://localhost:${port}`);
+}
+
+function readHitsFromFile() {
+    let hits = 0;
+
+    try {
+        hits = JSON.parse(fs.readFileSync(hitsFile)).hits || 0;
+    } catch(e) {}
+
+    return hits;
+}
 
 function addHit() {
     try {
