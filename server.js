@@ -23,7 +23,7 @@ let clientPasswordMD5 = crypto.createHash('md5').update(password).digest('hex');
 let fetchPromise = false;
 
 let img;
-let imgTs;
+let imgTs = 0;
 
 let hitsFile = path.join(__dirname, '.hits_counter');
 let hits = 0;
@@ -92,9 +92,9 @@ function addHit() {
 }
 
 function getImage() {
-    if (img ja ei rate limit vilea) {
+    if (imgTs + rateLimit > Date.now()) {
         console.log('Returned cached image');
-        return new Promise.resolve(img);
+        return Promise.resolve(img);
     }
 
     if (!fetchPromise) {
@@ -105,7 +105,7 @@ function getImage() {
     return fetchPromise.then(resp => {
         fetchPromise = false;
         img = resp.body
-        img.ts = Date.now();
+        imgTs = Date.now();
 
         return img;
     });
