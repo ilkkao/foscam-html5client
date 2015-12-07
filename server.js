@@ -8,6 +8,7 @@ const nconf = require('nconf');
 const socketIo = require('socket.io');
 const koa = require('koa');
 const staticServer = require('koa-static');
+const gzip = require('koa-gzip');
 const request = require('superagent-bluebird-promise');
 
 nconf.argv().env().file({ file: 'config.json' });
@@ -79,6 +80,7 @@ function configureKoa() {
         console.log(`  [RESP] (${this.status})`);
     });
 
+    app.use(gzip());
     app.use(staticServer('dist'));
 
     return app;
