@@ -14,6 +14,7 @@ const initialState = Map({
     secret: '',
     hits: '',
     imageUrl: '',
+    imageTs: 0
 });
 
 function parseImageDataUrl(image) {
@@ -47,7 +48,8 @@ export default function session(state = initialState, action) {
             });
         case SHOW_IMAGE:
             return state.merge({
-                imageUrl: parseImageDataUrl(action.image)
+                imageUrl: parseImageDataUrl(action.image),
+                imageTs: action.ts
             });
         default:
             return state;

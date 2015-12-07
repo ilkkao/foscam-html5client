@@ -2,12 +2,15 @@ import { connect } from 'react-redux';
 import Main from '../components/main';
 
 function mapStateToProps(state) {
+    const session = state.session;
+
     return {
-        loggedIn: state.session.get('loggedIn'),
-        failureReason: state.session.get('loginFailureReason'),
-        secret: state.session.get('secret'),
-        hits: state.session.get('hits'),
-        imageUrl: state.session.get('imageUrl')
+        loggedIn: session.get('loggedIn'),
+        failureReason: session.get('loginFailureReason'),
+        secret: session.get('secret'),
+        hits: session.get('hits'),
+        imageUrl: session.get('imageUrl'),
+        imageTs: session.get('imageTs')
     };
 }
 
