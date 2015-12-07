@@ -16,7 +16,8 @@ import './styles/style.css';
 // https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
 
-const socket = io(`http://localhost:3000`);
+const location = window.location;
+const socket = io(`${location.protocol}//${location.hostname}:${settings.nodeHTTPPort}`);
 
 socket.on('connect', () => {
     let secret = Cookies.get('secret');
