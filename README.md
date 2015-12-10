@@ -2,9 +2,7 @@
 
 Node.js app that can act as a proxy in front of [Foscam](http://foscam.us/) IP cameras.
 
-![Screenshot](http://i.imgur.com/fHnpddq.jpg)
-
-![Screenshot](http://i.imgur.com/FIaHSHy.png)
+![Screenshot](http://i.imgur.com/lPUxHk1.png)
 
 ## Features
 
