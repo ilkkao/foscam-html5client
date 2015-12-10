@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -p",
-    "dev": "webpack-dev-server --debug --progress --colors --watch"
+    "dev": "webpack-dev-server --debug --progress --colors --watch",
+    "serve": "nohup node server > node.log &"
   },
   "repository": {
     "type": "git",
