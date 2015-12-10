@@ -13,7 +13,6 @@
 
     "locale": "en",
     "page_title": "My Foscam Page",
-    "loading_label": "Loading…",
     "password_label": "Password",
     "login_label": "Login",
     "logout_label": "Logout",

@@ -24,7 +24,6 @@ module.exports = {
                 enableWebPassword: nconf.get('enable_web_password'),
                 locale: nconf.get('locale'),
                 pageTitle: nconf.get('page_title'),
-                loadingLabel: nconf.get('loading_label'),
                 refreshLabel: nconf.get('refresh_label'),
                 imageTakenLabel: nconf.get('image_taken_label'),
                 passwordLabel: nconf.get('password_label'),
