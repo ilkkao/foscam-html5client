@@ -1,5 +1,5 @@
 {
-    "base_url": "http://a.b.c.d:88/",
+    "camera_url": "http://a.b.c.d:88/",
     "user_name": "admin",
     "password": "",
 

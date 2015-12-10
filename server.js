@@ -14,7 +14,7 @@ const request = require('superagent-bluebird-promise');
 nconf.argv().env().file({ file: 'config.json' });
 
 const rateLimit = nconf.get('rate_limit') * 1000 || 60000;
-const baseUrl = nconf.get('base_url');
+const cameraUrl = nconf.get('camera_url');
 const username = nconf.get('user_name');
 const password = nconf.get('password');
 
@@ -117,7 +117,7 @@ function getImage() {
     }
 
     if (!fetchPromise) {
-        let url = `${baseUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
+        let url = `${cameraUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
         fetchPromise = request.get(url);
     }
 
