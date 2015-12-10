@@ -6,6 +6,7 @@ import AppBar from 'material-ui/lib/app-bar';
 
 import Login from './login';
 import Viewer from './viewer';
+import Spinner from './spinner';
 
 export default class Main extends Component {
     login(password) {
@@ -21,14 +22,18 @@ export default class Main extends Component {
     }
 
     render() {
+        let props = this.props;
+
         let Child;
         let LogoutButton = null;
 
-        if (this.props.loggedIn) {
-            Child = <Viewer {...this.props} refresh={this.refresh.bind(this)} />;
+        if (props.loading) {
+            Child = <Spinner />;
+        } else if (props.loggedIn) {
+            Child = <Viewer {...props} refresh={this.refresh.bind(this)} />;
             LogoutButton = <FlatButton onClick={this.logout.bind(this)} label="Logout" />;
         } else {
-            Child = <Login login={this.login.bind(this)} failureReason={this.props.failureReason} />;
+            Child = <Login login={this.login.bind(this)} failureReason={props.failureReason} />;
         }
 
         return (

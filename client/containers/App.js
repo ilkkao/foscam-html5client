@@ -10,7 +10,8 @@ function mapStateToProps(state) {
         secret: session.get('secret'),
         hits: session.get('hits'),
         imageUrl: session.get('imageUrl'),
-        imageTs: session.get('imageTs')
+        imageTs: session.get('imageTs'),
+        loading: session.get('loading')
     };
 }
 
