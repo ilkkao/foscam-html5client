@@ -17,7 +17,7 @@ import './styles/style.css';
 injectTapEventPlugin();
 
 const location = window.location;
-const socket = io(`${location.protocol}//${location.hostname}:${settings.nodeHTTPPort}`);
+const socket = io(`${location.protocol}//${location.hostname}:${settings.socketIoPort}`);
 
 socket.on('connect', () => {
     let secret = Cookies.get('secret');

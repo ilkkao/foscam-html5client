@@ -20,7 +20,7 @@ module.exports = {
             inject: 'body',
             appTitle: nconf.get('page_title'),
             appSettings : JSON.stringify({
-                nodeHTTPPort: nconf.get('node_http_port'),
+                socketIoPort: nconf.get('socket_io_client_port'),
                 enableWebPassword: nconf.get('enable_web_password'),
                 locale: nconf.get('locale'),
                 pageTitle: nconf.get('page_title'),

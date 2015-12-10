@@ -4,6 +4,8 @@
     "password": "",
 
     "node_http_port": 3000,
+    "socket_io_client_port": 3000,
+
     "rate_limit": 30,
 
     "enable_web_password": true,
