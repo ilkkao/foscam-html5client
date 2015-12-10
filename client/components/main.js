@@ -31,7 +31,7 @@ export default class Main extends Component {
             Child = <Spinner />;
         } else if (props.loggedIn) {
             Child = <Viewer {...props} refresh={this.refresh.bind(this)} />;
-            LogoutButton = <FlatButton onClick={this.logout.bind(this)} label="Logout" />;
+            LogoutButton = <FlatButton onClick={this.logout.bind(this)} label={settings.logoutLabel} />;
         } else {
             Child = <Login login={this.login.bind(this)} failureReason={props.failureReason} />;
         }
