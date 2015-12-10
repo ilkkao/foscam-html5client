@@ -5,6 +5,7 @@ import {
     COMPLETE_LOGIN_SUCCESS,
     COMPLETE_LOGIN_FAILURE,
     UPDATE_HITS,
+    START_IMAGE_LOADING,
     SHOW_IMAGE,
     LOGOUT
 } from '../actions/session';
@@ -54,8 +55,13 @@ export default function session(state = initialState, action) {
                 loggedIn: false,
                 loginFailureReason: ''
             });
+        case START_IMAGE_LOADING:
+            return state.merge({
+                loading: true
+            });
         case SHOW_IMAGE:
             return state.merge({
+                loading: false,
                 imageUrl: parseImageDataUrl(action.image),
                 imageTs: action.ts
             });

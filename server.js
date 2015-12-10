@@ -37,11 +37,14 @@ io.on('connection', socket => {
     let authenticated = false;
 
     let emit = (type, data) => {
+        data = data || {};
         data.type = type;
         socket.emit('event', data);
     };
 
     let sendImage = () => {
+        emit('START_IMAGE_LOADING');
+
         getImage()
            .then(image => emit('SHOW_IMAGE', { image: image, ts: imgTs }))
            .catch(err => emit('SHOW_IMAGE', { image: false, ts: Date.now() }));
@@ -117,11 +120,14 @@ function getImage() {
     }
 
     if (!fetchPromise) {
+        console.log('Image fetching started');
         let url = `${cameraUrl}/CGIProxy.fcgi?cmd=snapPicture2&usr=${username}&pwd=${password}`;
         fetchPromise = request.get(url);
     }
 
     return fetchPromise.then(resp => {
+        console.log('Image loaded, result:' + resp)
+
         fetchPromise = false;
         img = resp.body
         imgTs = Date.now();
